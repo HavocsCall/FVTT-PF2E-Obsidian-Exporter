@@ -1,0 +1,25 @@
+---
+NoteType: Feat
+aliases:
+tags:
+Source: {{md-yamlText system.publication.title}}
+Remaster: {{system.publication.remaster}}
+Level: {{system.level.value}}
+Rarity: {{capitalize system.traits.rarity}}
+Traits:
+  {{#each system.traits.value}}
+  - "{{md-trait this}}"
+  {{/each}}
+Category: {{capitalize system.category}}
+ActionType: {{md-actionLabel system.actionType.value system.actions.value}}
+Prerequisite: 
+  {{#each system.prerequisites.value}}
+  - {{capitalize this.value}}
+  {{/each}}
+Frequency: {{#if system.frequency.max}}{{system.frequency.max}} per {{md-map system.frequency.per 1 per round="Round" PT1M="Minute" PT10M="10 Minutes" PT1H="Hour" day="Day"}}{{/if}}
+---
+# {{name}}
+## **Actions:** `pf2:{{md-actionCode system.actionType.value system.actions.value}}`
+## Traits:`VIEW[{Traits}][text(renderMarkdown)]`
+***
+{{md-HTMLtoMarkdown system.description.value}}

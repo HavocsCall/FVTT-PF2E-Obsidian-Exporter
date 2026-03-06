@@ -1,0 +1,36 @@
+---
+NoteType: Weapon
+aliases:
+tags:
+Source: {{md-yamlText system.publication.title}}
+Remaster: {{system.publication.remaster}}
+Level: {{system.level.value}}
+Rarity: {{capitalize system.traits.rarity}}
+Traits:
+  {{#each system.traits.value}}
+  - "{{md-trait this}}"
+  {{/each}}
+Category: {{capitalize system.category}}
+Group: {{capitalize system.group}}
+Price: {{md-coinLabel system.price.value}}
+Bulk: {{system.bulk.value}}
+Usage: {{md-usage system.usage.value}}
+{{#if system.range}}
+Type: Ranged
+{{/if~}}
+{{#unless system.range}}
+Type: Melee
+{{/unless~}}
+Range: {{system.range}}
+Effect: {{system.damage.dice}}{{system.damage.die}} {{capitalize system.damage.damageType}}
+SplashDamage: {{system.splashDamage.value}}
+Reload: {{system.reload.value}}
+HitBonus: {{system.bonus.value}}
+---
+# {{name}}
+## Traits:`VIEW[{Traits}][text(renderMarkdown)]`
+### **Price:** `VIEW[{Price}][text(renderMarkdown)]`; **Damage:** `VIEW[{Damage}][text(renderMarkdown)]`; **Bulk:** `VIEW[{Bulk}][text(renderMarkdown)]`;
+### **Usage:** `VIEW[{Usage}][text(renderMarkdown)]`;
+### **Type:** `VIEW[{Type}][text(renderMarkdown)]`; **Category:** `VIEW[{Category}][text(renderMarkdown)]`; **Group:** `VIEW[{Group}][text(renderMarkdown)]`;
+***
+{{md-HTMLtoMarkdown system.description.value}}

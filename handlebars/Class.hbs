@@ -1,0 +1,66 @@
+---
+NoteType: Class
+aliases:
+tags:
+Source: {{md-yamlText system.publication.title}}
+Remaster: {{system.publication.remaster}}
+Level: {{system.level.value}}
+Rarity: {{capitalize system.traits.rarity}}
+Traits:
+  {{#each system.traits.value}}
+  - "{{md-trait this}}"
+  {{/each}}
+HP: "{{system.hp}}"
+KeyAbility:
+  {{#each system.keyAbility.value}}
+  - {{md-ability this}}
+  {{/each}}
+---
+# {{name}}
+***
+{{{md-HTMLtoMarkdown system.description.value this}}}
+## Initial Proficiencies
+### Perception
+{{{md-map system.perception 1="Trained" 2="Expert" 3="Master" 4="Legendary"}}} in [[Perception]]
+### Saving Throws
+{{{md-map system.savingThrows.fortitude 1="Trained" 2="Expert" 3="Master" 4="Legendary"}}} in [[Fortitude]]
+{{{md-map system.savingThrows.reflex 1="Trained" 2="Expert" 3="Master" 4="Legendary"}}} in [[Reflex]]
+{{{md-map system.savingThrows.will 1="Trained" 2="Expert" 3="Master" 4="Legendary"}}} in [[Will]]
+### Skills
+{{#if system.trainedSkills.value}}
+{{#each system.trainedSkills.value}}
+Trained in [[{{capitalize this}}]]
+{{/each}}
+{{/if}}
+{{#if system.trainedSkills.additional}}
+Trained in a number of additional skills equal to {{system.trainedSkills.additional}} plus your Intelligence modifier
+{{/if}}
+### Attacks
+{{#if (ne system.attacks.unarmed 0)}}
+{{{md-map system.attacks.unarmed 1="Trained" 2="Expert" 3="Master" 4="Legendary"}}} in Unarmed Attacks
+{{/if}}
+{{#if (ne system.attacks.simple 0)}}
+{{{md-map system.attacks.simple 1="Trained" 2="Expert" 3="Master" 4="Legendary"}}} in Simple Weapons
+{{/if}}
+{{#if (ne system.attacks.martial 0)}}
+{{{md-map system.attacks.martial 1="Trained" 2="Expert" 3="Master" 4="Legendary"}}} in Martial Weapons
+{{/if}}
+{{#if (ne system.attacks.advanced 0)}}
+{{{md-map system.attacks.advanced 1="Trained" 2="Expert" 3="Master" 4="Legendary"}}} in Advanced Weapons
+{{/if}}
+{{#if (ne system.attacks.other.rank 0)}}
+{{{md-map system.attacks.other.rank 1="Trained" 2="Expert" 3="Master" 4="Legendary"}}} in {{system.attacks.other.name}}
+{{/if}}
+### Defenses
+{{#if (ne system.defenses.unarmored 0)}}
+{{{md-map system.defenses.unarmored 1="Trained" 2="Expert" 3="Master" 4="Legendary"}}} in Unarmored Defense
+{{/if}}
+{{#if (ne system.defenses.light 0)}}
+{{{md-map system.defenses.light 1="Trained" 2="Expert" 3="Master" 4="Legendary"}}} in Light Armor
+{{/if}}
+{{#if (ne system.defenses.medium 0)}}
+{{{md-map system.defenses.medium 1="Trained" 2="Expert" 3="Master" 4="Legendary"}}} in Medium Armor
+{{/if}}
+{{#if (ne system.defenses.heavy 0)}}
+{{{md-map system.defenses.heavy 1="Trained" 2="Expert" 3="Master" 4="Legendary"}}} in Heavy Armor
+{{/if}}

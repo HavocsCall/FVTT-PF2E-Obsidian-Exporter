@@ -1,0 +1,42 @@
+{
+	"id": "FVTT-PF2E-Obsidian-Exporter",
+	"title": "PF2E Obsidian Exporter",
+	"description": "This FoundryVTT module",
+	"changelog": "CHANGELOG.md",
+	"download": "#{DOWNLOAD}#",
+	"license": "LICENSE",
+	"manifest": "#{MANIFEST}#",
+	"readme": "README.md",
+	"url": "#{URL}#",
+	"version": "#{VERSION}#",
+	"authors": [
+		{
+			"name": "HavocsCall",
+			"url": "https://github.com/HavocsCall",
+			"discord": "HavocsCall"
+		}
+	],
+	"compatibility": {
+		"minimum": "13",
+		"verified": "13"
+	},
+	"flags": {},
+	"languages": [
+		{
+			"lang": "en",
+			"name": "English",
+			"path": "lang/en.json",
+			"flags": {}
+		}
+	],
+	"relationships": {
+		"systems": [
+			{
+				"id": "pf2e",
+				"type": "system",
+				"compatibility": {}
+			}
+		]
+	},
+	"esmodules": ["src/esmodules/Obsidian-Exporter.Main.js"]
+}

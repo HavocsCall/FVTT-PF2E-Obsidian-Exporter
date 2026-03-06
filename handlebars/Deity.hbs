@@ -1,0 +1,40 @@
+---
+NoteType: Deity
+aliases:
+tags:
+Source: {{md-yamlText system.publication.title}}
+Remaster: {{system.publication.remaster}}
+Level: {{system.level.value}}
+Rarity: {{capitalize system.traits.rarity}}
+Traits:
+  {{#each system.traits.value}}
+  - "{{md-trait this}}"
+  {{/each}}
+Attribute:
+  {{#each system.attribute}}
+  - {{{md-ability this}}}
+  {{/each}}
+Font:
+  {{#each system.font}}
+  - {{capitalize this}}
+  {{/each}}
+Sanctification:
+  {{#each system.sanctification.what}}
+  - {{capitalize this}}
+  {{/each}}
+Skill: "[[{{capitalize system.skill}}]]"
+Weapon:
+  {{#each system.weapons}}
+  - "[[{{capitalize this}}]]"
+  {{/each}}
+Domains:
+  {{#each system.domains.primary}}
+  - "[[{{capitalize this}}]]"
+  {{/each}}
+  {{#each system.domains.alternate}}
+  - "[[{{capitalize this}}]]"
+  {{/each}}
+---
+# {{name}}
+***
+{{md-HTMLtoMarkdown system.description.value this}}

@@ -1,0 +1,30 @@
+---
+NoteType: Consumable
+aliases:
+tags:
+Source: {{md-yamlText system.publication.title}}
+Remaster: {{system.publication.remaster}}
+Level: {{system.level.value}}
+Rarity: {{capitalize system.traits.rarity}}
+Traits:
+  {{#each system.traits.value}}
+  - "{{md-trait this}}"
+  {{/each}}
+Category: {{capitalize system.category}}
+Group: {{capitalize system.group}}
+Price: {{md-coinLabel system.price.value}}
+Bulk: {{system.bulk.value}}
+Usage: {{md-usage system.usage.value}}
+Range: {{system.range}}
+Effect:
+  {{#each system.damage}}
+  - {{this.formula}} {{#if (eq this.type "untyped")}}Healing{{else}}{{capitalize this.type}}{{/if}}
+  {{/each}}
+SplashDamage: {{system.splashDamage.value}}
+---
+# {{name}}
+## Traits:`VIEW[{Traits}][text(renderMarkdown)]`
+### **Price:** `VIEW[{Price}][text(renderMarkdown)]`;
+### **Usage:** `VIEW[{Usage}][text(renderMarkdown)]`; **Bulk:** `VIEW[{Bulk}][text(renderMarkdown)]`;
+***
+{{md-HTMLtoMarkdown system.description.value}}

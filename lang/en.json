@@ -1,0 +1,81 @@
+{
+	"FVTT-PF2E-OBSIDIAN-EXPORTER": {
+		"NAME": "PF2E Obsidian Exporter",
+		"CONTEXT": {
+			"EXPORT-MARKDOWN": "Export as Markdown"
+		},
+		"LOGGING": {
+			"READY": "| Ready"
+		},
+		"SETTINGS": {
+			"ACTION-TEMPLATE": {
+				"NAME": "Action Template",
+				"HINT": "Choose a handlebars template file to be used for exporting actions."
+			},
+			"AMMO-TEMPLATE": {
+				"NAME": "Ammo Template",
+				"HINT": "Choose a handlebars template file to be used for exporting ammunition."
+			},
+			"ANCESTRY-TEMPLATE": {
+				"NAME": "Ancestry Template",
+				"HINT": "Choose a handlebars template file to be used for exporting ancestries."
+			},
+			"ARMOR-TEMPLATE": {
+				"NAME": "Armor Template",
+				"HINT": "Choose a handlebars template file to be used for exporting armor."
+			},
+			"BACKGROUND-TEMPLATE": {
+				"NAME": "Background Template",
+				"HINT": "Choose a handlebars template file to be used for exporting backgrounds."
+			},
+			"CLASS-TEMPLATE": {
+				"NAME": "Class Template",
+				"HINT": "Choose a handlebars template file to be used for exporting classes."
+			},
+			"CONDITION-TEMPLATE": {
+				"NAME": "Condition Template",
+				"HINT": "Choose a handlebars template file to be used for exporting conditions."
+			},
+			"CONSUMABLE-TEMPLATE": {
+				"NAME": "Consumable Template",
+				"HINT": "Choose a handlebars template file to be used for exporting consumables."
+			},
+			"CONTAINER-TEMPLATE": {
+				"NAME": "Container Template",
+				"HINT": "Choose a handlebars template file to be used for exporting containers."
+			},
+			"DEITY-TEMPLATE": {
+				"NAME": "Deity Template",
+				"HINT": "Choose a handlebars template file to be used for exporting deities."
+			},
+			"EQUIPMENT-TEMPLATE": {
+				"NAME": "Equipment Template",
+				"HINT": "Choose a handlebars template file to be used for exporting equipment."
+			},
+			"FEAT-TEMPLATE": {
+				"NAME": "Feat Template",
+				"HINT": "Choose a handlebars template file to be used for exporting feats."
+			},
+			"HERITAGE-TEMPLATE": {
+				"NAME": "Heritage Template",
+				"HINT": "Choose a handlebars template file to be used for exporting heritages."
+			},
+			"SHIELD-TEMPLATE": {
+				"NAME": "Shield Template",
+				"HINT": "Choose a handlebars template file to be used for exporting shields."
+			},
+			"SPELL-TEMPLATE": {
+				"NAME": "Spell Template",
+				"HINT": "Choose a handlebars template file to be used for exporting spells."
+			},
+			"TREASURE-TEMPLATE": {
+				"NAME": "Treasure Template",
+				"HINT": "Choose a handlebars template file to be used for exporting treasures."
+			},
+			"WEAPON-TEMPLATE": {
+				"NAME": "Weapon Template",
+				"HINT": "Choose a handlebars template file to be used for exporting weapons."
+			}
+		}
+	}
+}

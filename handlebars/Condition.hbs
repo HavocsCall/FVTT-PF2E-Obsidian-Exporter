@@ -1,0 +1,17 @@
+---
+NoteType: Condition
+aliases:
+tags:
+Source: {{md-yamlText system.publication.title}}
+Remaster: {{system.publication.remaster}}
+Level: {{system.level.value}}
+Rarity: {{capitalize system.traits.rarity}}
+Traits:
+  {{#each system.traits.value}}
+  - "{{md-trait this}}"
+  {{/each}}
+Group: {{capitalize system.group}}
+---
+# {{name}}
+***
+{{md-HTMLtoMarkdown system.description.value this}}

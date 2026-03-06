@@ -1,0 +1,53 @@
+---
+NoteType: Ancestry
+aliases:
+tags:
+Source: {{md-yamlText system.publication.title}}
+Remaster: {{system.publication.remaster}}
+Level: {{system.level.value}}
+Rarity: {{capitalize system.traits.rarity}}
+Traits:
+  {{#each system.traits.value}}
+  - "{{md-trait this}}"
+  {{/each}}
+HP: {{system.hp}}
+Size: {{md-map system.size ti="Tiny" sm="Small" med="Medium" lg="Large" hu="Huge" ga="Gargantuan"}}
+Speed: {{system.speed}}
+Boosts:
+  {{#if system.boosts.0.value}}
+  {{#each system.boosts.0.value}}
+  - {{md-ability this}}
+  {{/each}}
+  {{/if}}
+  {{#if system.boosts.1.value}}
+  - {{md-ability system.boosts.1.value}}
+  {{/if}}
+  {{#if system.boosts.2.value}}
+  - {{md-ability system.boosts.2.value}}
+  {{/if~}}
+Flaws: {{{md-ability system.flaws.0.value}}}
+Languages:
+  {{#each system.languages.value}}
+  - {{capitalize this}}
+  {{/each}}
+Vision: {{md-map system.vision normal="Normal" low-light-vision="Low-Light Vision" darkvision="Darkvision"}}
+---
+# {{name}}
+## Traits:`VIEW[{Traits}][text(renderMarkdown)]`
+***
+{{md-HTMLtoMarkdown system.description.value this}}
+## Mechanics
+### Hit Points
+`VIEW[{HP}][text(renderMarkdown)]`
+### Size
+`VIEW[{Size}][text(renderMarkdown)]`
+### Speed
+`VIEW[{Speed}][text(renderMarkdown)]`
+### Attribute Boosts
+`VIEW[{Boosts}][text(renderMarkdown)]`
+### Attribute Flaws
+`VIEW[{Flaws}][text(renderMarkdown)]`
+### Languages
+`VIEW[{Languages}][text(renderMarkdown)]`
+### Vision
+`VIEW[{Vision}][text(renderMarkdown)]`
