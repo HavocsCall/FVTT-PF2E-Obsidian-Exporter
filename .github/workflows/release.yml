@@ -47,15 +47,24 @@ jobs:
 
       # Create a folder containing all the module stuff and zip it for the release
       - name: Create zip
-        run: zip -r9 ./module.zip \
-          module.json             \
-          images/                 \
-          lang/                   \
-          packs/                  \
-          src/                    \
-          README.md               \
-          LICENSE                 \
-          CHANGELOG.md
+        run: |
+          files=(
+            module.json
+            lang
+            src
+            README.md
+            LICENSE
+            CHANGELOG.md
+          )
+
+          # Include optional folders only when they exist.
+          [[ -d images ]] && files+=(images)
+          [[ -d packs ]] && files+=(packs)
+
+          echo "Packaging:"
+          printf ' - %s\n' "${files[@]}"
+
+          zip -r9 ./module.zip "${files[@]}"
 
       # Add the module.json and the zip file to the release
       - name: Update release with files
