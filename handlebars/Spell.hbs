@@ -4,13 +4,13 @@ aliases:
 tags:
 Source: {{md-yamlText system.publication.title}}
 Remaster: {{system.publication.remaster}}
-Level: {{system.level.value}}
 Rarity: {{capitalize system.traits.rarity}}
 Traits:
   {{#each system.traits.value}}
   - "{{md-trait this}}"
   {{/each}}
 Rank: "{{system.level.value}}"
+SpellType: {{#if (md-contains system.traits.value "Focus")}}Focus{{else}}{{#if system.ritual}}Ritual{{else}}Spell{{/if}}{{/if}}
 Tradition:
   {{#each system.traits.traditions}}
   - {{capitalize this}}
@@ -24,19 +24,14 @@ Target: {{capitalize system.target.value}}
 Range: {{capitalize system.range.value}}
 Area: {{system.area.value}} feet {{system.area.type}}
 Duration: {{capitalize system.duration.value}}
-Sustained: {{system.duration.sustained}}
-{{#if system.defense.passive.statistic}}
-Defense: {{#if system.defense.passive.statistic}}AC{{else}}{{capitalize system.defense.save.statistic}}{{/if}}
-{{/if~}}
-{{#if system.defense.save.statistic}}
-Defense: {{capitalize system.defense.save.statistic}}
-{{/if~}}
+Sustained: {{capitalize system.duration.sustained}}
+Defense: {{#if (md-contains system.traits.value "Attack")}}AC{{else}}{{#if system.defense.save.statistic}}{{capitalize system.defense.save.statistic}}{{/if}}{{/if}}
 Heightening: {{#if (eq system.heightening.type "interval")}}Interval +{{system.heightening.interval}}{{/if}}{{#if (eq system.heightening.type "fixed")}}Fixed Level{{/if}}
 Frequency: {{#if system.frequency.max}}{{system.frequency.max}} per {{md-map system.frequency.per 1 per round="Round" PT1M="Minute" PT10M="10 Minutes" PT1H="Hour" day="Day"}}{{/if}}
 ---
 # {{name}}
 ## Traits:`VIEW[{Traits}][text(renderMarkdown)]`
-### **Actions:** `pf2:{{md-actionCode system.time.value system.time.value}}`
+### **Actions:** {{#if system.time.value}}`pf2:{{md-actionCode system.time.value system.time.value}}`{{/if}}
 ### **Traditions:**`VIEW[{Tradition}][text(renderMarkdown)]`
 ### **Range:**`VIEW[{Range}][text(renderMarkdown)]`; **Area:**`VIEW[{Area}][text(renderMarkdown)]`; **Target:**`VIEW[{Target}][text(renderMarkdown)]`;
 ***

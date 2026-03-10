@@ -381,6 +381,65 @@ const tableMapHelper = (value, ...args) => {
 };
 
 /**
+ * Checks whether a value exists within a collection.
+ * Supports arrays/iterables, strings (substring match), maps/sets, and plain objects.
+ * String matching is case-insensitive and trims surrounding whitespace.
+ * @param {any} collection Collection to inspect.
+ * @param {string} needle Value to find.
+ * @returns {boolean} True when collection contains needle.
+ */
+function containsValue(collection, needle) {
+	if (collection == null || needle == null) return false;
+
+	const normalize = (value) => String(value ?? "").trim().toLowerCase();
+	const normalizedNeedle = normalize(needle);
+	if (!normalizedNeedle) return false;
+	const needleIsStringLike = typeof needle === "string" || typeof needle === "number" || typeof needle === "boolean";
+	const matches = (candidate) => {
+		if (needleIsStringLike || typeof candidate === "string") return normalize(candidate) === normalizedNeedle;
+		return candidate === needle;
+	};
+
+	if (Array.isArray(collection)) return collection.some((entry) => matches(entry));
+
+	if (typeof collection === "string") return normalize(collection).includes(normalizedNeedle);
+
+	if (collection instanceof Set) {
+		for (const value of collection.values()) {
+			if (matches(value)) return true;
+		}
+		return false;
+	}
+
+	if (collection instanceof Map) {
+		for (const [key, value] of collection.entries()) {
+			if (matches(key) || matches(value)) return true;
+		}
+		return false;
+	}
+
+	if (typeof collection === "object" && typeof collection.has === "function") {
+		if (collection.has(needle) || collection.has(normalizedNeedle)) return true;
+	}
+
+	if (typeof collection === "object" && Symbol.iterator in collection) {
+		for (const value of collection) {
+			if (matches(value)) return true;
+		}
+		return false;
+	}
+
+	if (typeof collection === "object") {
+		for (const [key, value] of Object.entries(collection)) {
+			if (matches(key) || matches(value)) return true;
+		}
+		return false;
+	}
+
+	return false;
+}
+
+/**
  * Shared Turndown instance used by `md-HTMLtoMarkdown`.
  * Created once at module load to avoid re-instantiating on each helper call.
  */
@@ -417,6 +476,11 @@ export function registerHandlebarsHelpers() {
 	);
 
 	Handlebars.registerHelper("md-map", tableMapHelper);
+
+	Handlebars.registerHelper("md-contains", (collection, needle) => containsValue(collection, needle));
+
+	// Backward compatibility alias for existing templates.
+	Handlebars.registerHelper("md-traitsInclude", (traits, trait) => containsValue(traits, trait));
 
 	Handlebars.registerHelper("md-HTMLtoMarkdown", (value) => {
 		const html = String(value ?? "").trim();
