@@ -479,9 +479,6 @@ export function registerHandlebarsHelpers() {
 
 	Handlebars.registerHelper("md-contains", (collection, needle) => containsValue(collection, needle));
 
-	// Backward compatibility alias for existing templates.
-	Handlebars.registerHelper("md-traitsInclude", (traits, trait) => containsValue(traits, trait));
-
 	Handlebars.registerHelper("md-HTMLtoMarkdown", (value) => {
 		const html = String(value ?? "").trim();
 		if (!html) return "";

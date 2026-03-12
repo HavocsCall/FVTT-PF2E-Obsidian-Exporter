@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2026-03-12
+### Added
+- New helper: `md-contains` for case-insensitive membership checks across arrays, strings, sets, maps, iterables, and object keys/values.
+
+### Changed
+- Moved all built-in Handlebars templates from `handlebars/` to `src/handlebars/`.
+- Updated default module template setting paths to the new `src/handlebars/*.hbs` location.
+- Updated release packaging workflow to stop including the old top-level `handlebars/` directory.
+- Refined spell template frontmatter and rendering:
+  - Added `SpellType` output (`Focus`, `Ritual`, or `Spell`).
+  - Normalized `Sustained` capitalization.
+  - Consolidated `Defense` logic using trait-aware checks (`Attack` => `AC`).
+  - Guarded action icon output when no action value is present.
+
 ## [1.0.0] - 2026-03-05
 
 ### Added
