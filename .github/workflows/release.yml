@@ -60,7 +60,6 @@ jobs:
           # Include optional folders only when they exist.
           [[ -d images ]] && files+=(images)
           [[ -d packs ]] && files+=(packs)
-          [[ -d handlebars ]] && files+=(handlebars)
 
           echo "Packaging:"
           printf ' - %s\n' "${files[@]}"

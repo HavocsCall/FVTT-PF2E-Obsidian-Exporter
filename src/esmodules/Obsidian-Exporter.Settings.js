@@ -7,7 +7,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Action.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Action.hbs",
     });
 
 	game.settings.register(MODULE_ID, SETTINGS.AMMO_TEMPLATE, {
@@ -16,7 +16,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Ammo.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Ammo.hbs",
 	});
 
 	game.settings.register(MODULE_ID, SETTINGS.ANCESTRY_TEMPLATE, {
@@ -25,7 +25,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Ancestry.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Ancestry.hbs",
 	});
 
 	game.settings.register(MODULE_ID, SETTINGS.ARMOR_TEMPLATE, {
@@ -34,7 +34,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Armor.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Armor.hbs",
 	});
 
 	game.settings.register(MODULE_ID, SETTINGS.BACKGROUND_TEMPLATE, {
@@ -43,7 +43,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Background.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Background.hbs",
 	});
 
 	game.settings.register(MODULE_ID, SETTINGS.CLASS_TEMPLATE, {
@@ -52,7 +52,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Class.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Class.hbs",
 	});
 
 	game.settings.register(MODULE_ID, SETTINGS.CONDITION_TEMPLATE, {
@@ -61,7 +61,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Condition.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Condition.hbs",
 	});
 
 	game.settings.register(MODULE_ID, SETTINGS.CONSUMABLE_TEMPLATE, {
@@ -70,7 +70,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Consumable.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Consumable.hbs",
 	});
 
 	game.settings.register(MODULE_ID, SETTINGS.CONTAINER_TEMPLATE, {
@@ -79,7 +79,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Container.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Container.hbs",
 	});
 
 	game.settings.register(MODULE_ID, SETTINGS.DEITY_TEMPLATE, {
@@ -88,7 +88,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Deity.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Deity.hbs",
 	});
 
 	game.settings.register(MODULE_ID, SETTINGS.EQUIPMENT_TEMPLATE, {
@@ -97,7 +97,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Equipment.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Equipment.hbs",
 	});
 
 	game.settings.register(MODULE_ID, SETTINGS.FEAT_TEMPLATE, {
@@ -106,7 +106,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Feat.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Feat.hbs",
 	});
 
 	game.settings.register(MODULE_ID, SETTINGS.HERITAGE_TEMPLATE, {
@@ -115,7 +115,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Heritage.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Heritage.hbs",
 	});
 
 	game.settings.register(MODULE_ID, SETTINGS.SHIELD_TEMPLATE, {
@@ -124,7 +124,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Shield.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Shield.hbs",
 	});
 
 	game.settings.register(MODULE_ID, SETTINGS.SPELL_TEMPLATE, {
@@ -133,7 +133,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Spell.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Spell.hbs",
 	});
 
 	game.settings.register(MODULE_ID, SETTINGS.TREASURE_TEMPLATE, {
@@ -142,7 +142,7 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Treasure.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Treasure.hbs",
 	});
 
 	game.settings.register(MODULE_ID, SETTINGS.WEAPON_TEMPLATE, {
@@ -151,6 +151,6 @@ export function registerModuleSettings() {
 		scope: "client",
 		config: true,
 		type: String,
-		default: "modules/FVTT-PF2E-Obsidian-Exporter/handlebars/Weapon.hbs",
+		default: "modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Weapon.hbs",
 	});
 }
