@@ -73,7 +73,7 @@ Go to `Game Settings -> Configure Settings -> Module Settings -> PF2E Obsidian E
 
 Each supported item type has a template path setting. By default, templates point to:
 
-`modules/FVTT-PF2E-Obsidian-Exporter/handlebars/*.hbs`
+`modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/*.hbs`
 
 You can replace these with your own Handlebars templates to match your Obsidian vault conventions.
 

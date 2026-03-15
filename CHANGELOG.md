@@ -17,7 +17,6 @@ All notable changes to this project will be documented in this file.
   - Guarded action icon output when no action value is present.
 
 ## [1.0.0] - 2026-03-05
-
 ### Added
 
 - Initial release of PF2E Obsidian Exporter.
