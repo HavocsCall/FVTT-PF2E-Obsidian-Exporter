@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "node tests/pf2e-text-utils.test.js",
+    "test": "node tests/PF2E-Text-Utils.test.js",
     "format": "prettier . --check",
     "format:write": "prettier . --write"
   },
