@@ -4,21 +4,21 @@ aliases:
 tags:
 Source: {{md-yamlText system.publication.title}}
 Remaster: {{system.publication.remaster}}
-Level: {{system.level.value}}
-Rarity: {{capitalize system.traits.rarity}}
+Level: "{{system.level.value}}"
+Rarity: {{md-titleCase system.traits.rarity}}
 Traits:
   {{#each system.traits.value}}
   - "{{md-trait this}}"
   {{/each}}
-Category: {{capitalize system.category}}
-Group: {{capitalize system.group}}
+Category: {{md-titleCase system.category}}
+Group: {{md-titleCase system.group}}
 Price: {{md-coinLabel system.price.value}}
 Bulk: {{system.bulk.value}}
 Usage: {{md-usage system.usage.value}}
 Range: {{system.range}}
 Effect:
   {{#each system.damage}}
-  - {{this.formula}} {{#if (eq this.type "untyped")}}Healing{{else}}{{capitalize this.type}}{{/if}}
+  - {{this.formula}} {{#if (eq this.type "untyped")}}Healing{{else}}{{md-titleCase this.type}}{{/if}}
   {{/each}}
 SplashDamage: {{system.splashDamage.value}}
 ---

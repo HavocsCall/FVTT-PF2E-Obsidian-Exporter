@@ -4,30 +4,26 @@ aliases:
 tags:
 Source: {{md-yamlText system.publication.title}}
 Remaster: {{system.publication.remaster}}
-Rarity: {{capitalize system.traits.rarity}}
+Rarity: {{md-titleCase system.traits.rarity}}
 Traits:
   {{#each system.traits.value}}
   - "{{md-trait this}}"
   {{/each}}
-HP: {{system.hp}}
+HP: "{{system.hp}}"
 Size: {{md-map system.size ti="Tiny" sm="Small" med="Medium" lg="Large" hu="Huge" ga="Gargantuan"}}
-Speed: {{system.speed}}
+Speed: "{{system.speed}}"
 Boosts:
-  {{#if system.boosts.0.value}}
-  {{#each system.boosts.0.value}}
-  - {{md-ability this}}
-  {{/each}}
-  {{/if}}
-  {{#if system.boosts.1.value}}
-  - {{md-ability system.boosts.1.value}}
-  {{/if}}
-  {{#if system.boosts.2.value}}
-  - {{md-ability system.boosts.2.value}}
-  {{/if~}}
+  {{#each (md-unique (md-list
+    (md-ability system.boosts.0.value)
+    (md-ability system.boosts.1.value)
+    (md-ability system.boosts.2.value)
+  ))}}
+  - {{this}}
+  {{/each~}}
 Flaws: {{{md-ability system.flaws.0.value}}}
 Languages:
   {{#each system.languages.value}}
-  - {{capitalize this}}
+  - {{md-titleCase this}}
   {{/each}}
 Vision: {{md-map system.vision normal="Normal" low-light-vision="Low-Light Vision" darkvision="Darkvision"}}
 ---

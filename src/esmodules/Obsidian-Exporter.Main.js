@@ -1,6 +1,12 @@
-import { MODULE_ID, SETTINGS } from "./Obsidian-Exporter.Constants.js";
+import { ITEM_TEMPLATE_SETTINGS, MODULE_ID } from "./Obsidian-Exporter.Constants.js";
 import { registerModuleSettings } from "./Obsidian-Exporter.Settings.js";
 import { registerHandlebarsHelpers } from "./Obsidian-Exporter.Handlebar-Helpers.js";
+import {
+	downloadMarkdown,
+	downloadZip,
+	getUniqueMarkdownBaseName,
+	sanitizeFileName,
+} from "./Obsidian-Exporter.Export-Utils.js";
 import { strToU8, zipSync } from "../vendor/fflate.browser.js";
 
 // -------------------- Hooks -------------------- //
@@ -49,8 +55,21 @@ Hooks.on("getCompendiumContextOptions", (_html, menuItems) => {
 });
 
 Hooks.once("ready", () => {
-	console.log(MODULE_ID, game.i18n.localize("FVTT-PF2E-OBSIDIAN-EXPORTER.LOGGING.READY"));
+	console.log(MODULE_ID, game.i18n.localize("FVTT-PF2E-OBSIDIAN-EXPORTER.NOTIFICATIONS.READY"));
 });
+
+function localizeExporter(key) {
+	return game.i18n.localize(`FVTT-PF2E-OBSIDIAN-EXPORTER.${key}`);
+}
+
+function formatExporter(key, data) {
+	return game.i18n.format(`FVTT-PF2E-OBSIDIAN-EXPORTER.${key}`, data);
+}
+
+function notifyExportFailure(key, data, error) {
+	console.error(`${MODULE_ID} | Export failed`, error);
+	ui.notifications?.error(formatExporter(key, data));
+}
 
 // -------------------- Context Resolution Helpers -------------------- //
 /**
@@ -122,27 +141,7 @@ function getFolderFromContextHeader(header) {
  * @returns {string|undefined} The setting key for the item type.
  */
 function getSettingForItemType(itemType) {
-	const typeToSetting = {
-		action: SETTINGS.ACTION_TEMPLATE,
-		ammo: SETTINGS.AMMO_TEMPLATE,
-		ancestry: SETTINGS.ANCESTRY_TEMPLATE,
-		armor: SETTINGS.ARMOR_TEMPLATE,
-		background: SETTINGS.BACKGROUND_TEMPLATE,
-		class: SETTINGS.CLASS_TEMPLATE,
-		condition: SETTINGS.CONDITION_TEMPLATE,
-		consumable: SETTINGS.CONSUMABLE_TEMPLATE,
-		container: SETTINGS.CONTAINER_TEMPLATE,
-		deity: SETTINGS.DEITY_TEMPLATE,
-		equipment: SETTINGS.EQUIPMENT_TEMPLATE,
-		feat: SETTINGS.FEAT_TEMPLATE,
-		heritage: SETTINGS.HERITAGE_TEMPLATE,
-		shield: SETTINGS.SHIELD_TEMPLATE,
-		spell: SETTINGS.SPELL_TEMPLATE,
-		treasure: SETTINGS.TREASURE_TEMPLATE,
-		weapon: SETTINGS.WEAPON_TEMPLATE,
-	};
-
-	return typeToSetting[itemType];
+	return ITEM_TEMPLATE_SETTINGS.find((entry) => entry.itemType === itemType)?.settingKey;
 }
 
 /**
@@ -153,57 +152,28 @@ function getSettingForItemType(itemType) {
 async function renderItemMarkdown(item) {
 	const settingKey = getSettingForItemType(item.type);
 	if (!settingKey) {
-		return `# ${item.name}\n\nNo template is configured for item type \`${item.type}\`.`;
+		return formatExporter("EXPORT.MARKDOWN.NO-TEMPLATE", {
+			itemName: item.name,
+			itemType: item.type,
+		});
 	}
 
 	const templatePath = game.settings.get(MODULE_ID, settingKey);
 	const itemData = item.toObject();
 
 	try {
-		return await renderTemplate(templatePath, itemData);
+		return await foundry.applications.handlebars.renderTemplate(templatePath, itemData);
 	} catch (error) {
 		console.error(`${MODULE_ID} | Failed to render template "${templatePath}" for item "${item.name}"`, error);
-		return `# ${item.name}\n\nFailed to render template \`${templatePath}\`.\n\n\`\`\`\n${String(error)}\n\`\`\``;
+		return formatExporter("EXPORT.MARKDOWN.RENDER-FAILED", {
+			itemName: item.name,
+			templatePath,
+			error: String(error),
+		});
 	}
 }
 
 // -------------------- Path and Naming Helpers -------------------- //
-/**
- * Sanitizes a filename so it is safe for downloads across operating systems.
- * @param {string} name The original filename.
- * @returns {string} A safe filename, or "export" when empty after sanitization.
- */
-function sanitizeFileName(name) {
-	const withoutIllegalChars = String(name).replace(/[<>:"/\\|?*]/g, "_");
-	const withoutControlChars = Array.from(withoutIllegalChars, (char) =>
-		char.charCodeAt(0) < 32 ? "_" : char,
-	).join("");
-	return withoutControlChars.trim() || "export";
-}
-
-/**
- * Ensures a markdown base filename is unique within a path by appending numeric suffixes.
- * @param {string} name The preferred item name.
- * @param {Set<string>} usedNames Set of already-used base names in the current path.
- * @returns {string} A unique, sanitized markdown base filename.
- */
-function getUniqueMarkdownBaseName(name, usedNames) {
-	const baseName = sanitizeFileName(name);
-	if (!usedNames.has(baseName)) {
-		usedNames.add(baseName);
-		return baseName;
-	}
-
-	let index = 2;
-	let candidate = `${baseName} (${index})`;
-	while (usedNames.has(candidate)) {
-		index += 1;
-		candidate = `${baseName} (${index})`;
-	}
-	usedNames.add(candidate);
-	return candidate;
-}
-
 /**
  * Collects all Item documents in a folder and its child folders.
  * @param {Folder} folder The root Item folder to traverse.
@@ -260,46 +230,6 @@ function getCompendiumItemPath(item, pack, rootPath) {
 	return segments.length ? `${rootPath}/${segments.join("/")}` : rootPath;
 }
 
-// -------------------- Download Helpers -------------------- //
-/**
- * Creates and downloads a blob as a file in the browser.
- * @param {string} fileName The base name to use for the file.
- * @param {string} extension The file extension without a leading dot.
- * @param {string} mimeType The MIME type of the blob content.
- * @param {string|Uint8Array} content The content written into the blob.
- * @returns {void}
- */
-function downloadBlob(fileName, extension, mimeType, content) {
-	const blob = new Blob([content], { type: mimeType });
-	const objectUrl = URL.createObjectURL(blob);
-	const link = document.createElement("a");
-
-	link.href = objectUrl;
-	link.download = `${sanitizeFileName(fileName)}.${extension}`;
-	link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, view: window }));
-	setTimeout(() => URL.revokeObjectURL(objectUrl), 100);
-}
-
-/**
- * Downloads markdown text as a `.md` file.
- * @param {string} fileName The base filename to use.
- * @param {string} content The markdown content.
- * @returns {void}
- */
-function downloadMarkdown(fileName, content) {
-	downloadBlob(fileName, "md", "text/markdown;charset=utf-8", content);
-}
-
-/**
- * Downloads zip bytes as a `.zip` file.
- * @param {string} fileName The base filename to use.
- * @param {Uint8Array} zipBytes The compressed ZIP byte array.
- * @returns {void}
- */
-function downloadZip(fileName, zipBytes) {
-	downloadBlob(fileName, "zip", "application/zip", zipBytes);
-}
-
 // -------------------- Export Actions -------------------- //
 /**
  * Renders item entries and writes them into a ZIP archive for download.
@@ -339,14 +269,21 @@ async function exportItemsAsZip(exportName, entries) {
  * @returns {Promise<void>}
  */
 async function exportItemFromContextHeader(header) {
-	const item = await getItemFromContextHeader(header);
-	if (!item) {
-		ui.notifications?.warn(`${MODULE_ID} | Could not find the selected item.`);
-		return;
-	}
+	let itemName = "";
 
-	const markdown = await renderItemMarkdown(item);
-	downloadMarkdown(item.name, markdown);
+	try {
+		const item = await getItemFromContextHeader(header);
+		if (!item) {
+			ui.notifications?.warn(localizeExporter("NOTIFICATIONS.ITEM-NOT-FOUND"));
+			return;
+		}
+
+		itemName = item.name;
+		const markdown = await renderItemMarkdown(item);
+		downloadMarkdown(item.name, markdown);
+	} catch (error) {
+		notifyExportFailure("NOTIFICATIONS.ITEM-EXPORT-FAILED", { itemName: itemName || "Unknown Item" }, error);
+	}
 }
 
 /**
@@ -355,24 +292,35 @@ async function exportItemFromContextHeader(header) {
  * @returns {Promise<void>}
  */
 async function exportFolderFromContextHeader(header) {
-	const folder = getFolderFromContextHeader(header);
-	if (!folder) {
-		ui.notifications?.warn(`${MODULE_ID} | Could not find the selected folder.`);
-		return;
-	}
+	let folderName = "";
 
-	if (folder.type !== "Item") {
-		ui.notifications?.warn(`${MODULE_ID} | Folder "${folder.name}" is not an Item folder.`);
-		return;
-	}
+	try {
+		const folder = getFolderFromContextHeader(header);
+		if (!folder) {
+			ui.notifications?.warn(localizeExporter("NOTIFICATIONS.FOLDER-NOT-FOUND"));
+			return;
+		}
 
-	const folderEntries = collectFolderItemsRecursively(folder);
-	if (!folderEntries.length) {
-		ui.notifications?.warn(`${MODULE_ID} | Folder "${folder.name}" has no items to export.`);
-		return;
-	}
+		folderName = folder.name;
+		if (folder.type !== "Item") {
+			ui.notifications?.warn(formatExporter("NOTIFICATIONS.FOLDER-WRONG-TYPE", { folderName: folder.name }));
+			return;
+		}
 
-	await exportItemsAsZip(folder.name, folderEntries);
+		const folderEntries = collectFolderItemsRecursively(folder);
+		if (!folderEntries.length) {
+			ui.notifications?.warn(formatExporter("NOTIFICATIONS.FOLDER-EMPTY", { folderName: folder.name }));
+			return;
+		}
+
+		await exportItemsAsZip(folder.name, folderEntries);
+	} catch (error) {
+		notifyExportFailure(
+			"NOTIFICATIONS.FOLDER-EXPORT-FAILED",
+			{ folderName: folderName || "Unknown Folder" },
+			error,
+		);
+	}
 }
 
 /**
@@ -381,28 +329,39 @@ async function exportFolderFromContextHeader(header) {
  * @returns {Promise<void>}
  */
 async function exportCompendiumFromContextHeader(header) {
-	const pack = getCompendiumPackFromContextHeader(header);
-	if (!pack) {
-		ui.notifications?.warn(`${MODULE_ID} | Could not find the selected compendium.`);
-		return;
-	}
+	let packTitle = "";
 
-	if (pack.documentName !== "Item") {
-		ui.notifications?.warn(`${MODULE_ID} | Compendium "${pack.title}" is not an Item compendium.`);
-		return;
-	}
+	try {
+		const pack = getCompendiumPackFromContextHeader(header);
+		if (!pack) {
+			ui.notifications?.warn(localizeExporter("NOTIFICATIONS.COMPENDIUM-NOT-FOUND"));
+			return;
+		}
 
-	const documents = await pack.getDocuments();
-	const items = documents.filter((doc) => doc?.documentName === "Item");
-	if (!items.length) {
-		ui.notifications?.warn(`${MODULE_ID} | Compendium "${pack.title}" has no items to export.`);
-		return;
-	}
+		packTitle = pack.title;
+		if (pack.documentName !== "Item") {
+			ui.notifications?.warn(formatExporter("NOTIFICATIONS.COMPENDIUM-WRONG-TYPE", { packTitle: pack.title }));
+			return;
+		}
 
-	const rootPath = sanitizeFileName(pack.title);
-	const entries = items.map((item) => ({
-		item,
-		path: getCompendiumItemPath(item, pack, rootPath),
-	}));
-	await exportItemsAsZip(pack.title, entries);
+		const documents = await pack.getDocuments();
+		const items = documents.filter((doc) => doc?.documentName === "Item");
+		if (!items.length) {
+			ui.notifications?.warn(formatExporter("NOTIFICATIONS.COMPENDIUM-EMPTY", { packTitle: pack.title }));
+			return;
+		}
+
+		const rootPath = sanitizeFileName(pack.title);
+		const entries = items.map((item) => ({
+			item,
+			path: getCompendiumItemPath(item, pack, rootPath),
+		}));
+		await exportItemsAsZip(pack.title, entries);
+	} catch (error) {
+		notifyExportFailure(
+			"NOTIFICATIONS.COMPENDIUM-EXPORT-FAILED",
+			{ packTitle: packTitle || "Unknown Compendium" },
+			error,
+		);
+	}
 }

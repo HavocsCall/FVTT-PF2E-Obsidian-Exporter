@@ -4,8 +4,28 @@
 		"CONTEXT": {
 			"EXPORT-MARKDOWN": "Export as Markdown"
 		},
-		"LOGGING": {
-			"READY": "| Ready"
+		"NOTIFICATIONS": {
+			"READY": "| Ready",
+			"ITEM-NOT-FOUND": "Could not find the selected item.",
+			"ITEM-EXPORT-FAILED": "Failed to export item \"{itemName}\".",
+			"FOLDER-NOT-FOUND": "Could not find the selected folder.",
+			"FOLDER-WRONG-TYPE": "Folder \"{folderName}\" is not an Item folder.",
+			"FOLDER-EMPTY": "Folder \"{folderName}\" has no items to export.",
+			"FOLDER-EXPORT-FAILED": "Failed to export folder \"{folderName}\".",
+			"COMPENDIUM-NOT-FOUND": "Could not find the selected compendium.",
+			"COMPENDIUM-WRONG-TYPE": "Compendium \"{packTitle}\" is not an Item compendium.",
+			"COMPENDIUM-EMPTY": "Compendium \"{packTitle}\" has no items to export.",
+			"COMPENDIUM-EXPORT-FAILED": "Failed to export compendium \"{packTitle}\".",
+			"TRAITS-NOT-FOUND": "No trait descriptions were found in CONFIG.PF2E.traitsDescriptions.",
+			"TRAITS-EXPORTED": "Exported {count} traits.",
+			"TRAITS-EXPORT-FAILED": "Failed to export traits."
+		},
+		"EXPORT": {
+			"MARKDOWN": {
+				"NO-TEMPLATE": "# {itemName}\n\nNo template is configured for item type `{itemType}`.",
+				"RENDER-FAILED": "# {itemName}\n\nFailed to render template `{templatePath}`.\n\n```\n{error}\n```",
+				"TRAIT-RENDER-FAILED": "# {traitName}\n\nFailed to render template `{templatePath}`.\n\n```\n{error}\n```"
+			}
 		},
 		"SETTINGS": {
 			"ACTION-TEMPLATE": {
@@ -75,6 +95,19 @@
 			"WEAPON-TEMPLATE": {
 				"NAME": "Weapon Template",
 				"HINT": "Choose a handlebars template file to be used for exporting weapons."
+			},
+			"TRAIT-TEMPLATE": {
+				"NAME": "Trait Template",
+				"HINT": "Choose a handlebars template file to be used for exporting traits."
+			},
+			"EXPORT-TRAITS": {
+				"NAME": "Trait Export",
+				"LABEL": "Open Exporter",
+				"HINT": "Open the trait export dialog and export all PF2E trait descriptions as markdown.",
+				"TITLE": "Export Traits",
+				"DESCRIPTION": "Exports each PF2E trait description from CONFIG.PF2E.traitsDescriptions into its own markdown file inside a Traits folder.",
+				"CURRENT-TEMPLATE": "Current template:",
+				"BUTTON": "Export Traits"
 			}
 		}
 	}

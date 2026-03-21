@@ -4,39 +4,32 @@ aliases:
 tags:
 Source: {{md-yamlText system.publication.title}}
 Remaster: {{system.publication.remaster}}
-Rarity: {{capitalize system.traits.rarity}}
+Rarity: {{md-titleCase system.traits.rarity}}
 Traits:
   {{#each system.traits.value}}
   - "{{md-trait this}}"
   {{/each}}
 Boosts:
-  {{#if system.boosts.0.value}}
-  {{#each system.boosts.0.value}}
-  - {{md-ability this}}
-  {{/each}}
-  {{/if}}
-  {{#if system.boosts.1.value}}
-  - {{md-ability system.boosts.1.value}}
-  {{/if}}
-  {{#if system.boosts.2.value}}
-  - {{md-ability system.boosts.2.value}}
-  {{/if~}}
+  {{#each (md-unique (md-list
+    (md-ability system.boosts.0.value)
+    (md-ability system.boosts.1.value)
+    (md-ability system.boosts.2.value)
+  ))}}
+  - {{this}}
+  {{/each~}}
 Feat:
   {{#each system.items}}
-  - "[[{{this.name}}]]"
+  - "[[{{this}}]]"
   {{/each}}
 Skill:
   {{#each system.trainedSkills.value}}
-  - "[[{{capitalize this}}]]"
+  - "[[{{md-titleCase this}}]]"
   {{/each}}
 Lore:
   {{#each system.trainedSkills.lore}}
-  - {{capitalize this}}
+  - {{md-titleCase this}}
   {{/each}}
 ---
 # {{name}}
 ***
 {{md-HTMLtoMarkdown system.description.value this}}
-
-
-

@@ -4,7 +4,7 @@ aliases:
 tags:
 Source: {{md-yamlText system.publication.title}}
 Remaster: {{system.publication.remaster}}
-Rarity: {{capitalize system.traits.rarity}}
+Rarity: {{md-titleCase system.traits.rarity}}
 Traits:
   {{#each system.traits.value}}
   - "{{md-trait this}}"
@@ -28,7 +28,7 @@ KeyAbility:
 ### Skills
 {{#if system.trainedSkills.value}}
 {{#each system.trainedSkills.value}}
-Trained in [[{{capitalize this}}]]
+Trained in [[{{md-titleCase this}}]]
 {{/each}}
 {{/if}}
 {{#if system.trainedSkills.additional}}

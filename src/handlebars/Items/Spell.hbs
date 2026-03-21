@@ -4,7 +4,7 @@ aliases:
 tags:
 Source: {{md-yamlText system.publication.title}}
 Remaster: {{system.publication.remaster}}
-Rarity: {{capitalize system.traits.rarity}}
+Rarity: {{md-titleCase system.traits.rarity}}
 Traits:
   {{#each system.traits.value}}
   - "{{md-trait this}}"
@@ -13,19 +13,19 @@ Rank: "{{system.level.value}}"
 SpellType: {{#if (md-contains system.traits.value "Focus")}}Focus{{else}}{{#if system.ritual}}Ritual{{else}}Spell{{/if}}{{/if}}
 Tradition:
   {{#each system.traits.traditions}}
-  - {{capitalize this}}
+  - {{md-titleCase this}}
   {{/each}}
 Actions: {{md-actionLabel system.time.value system.time.value}}
 Effect:
   {{#each system.damage}}
-  - {{this.formula}} {{#if (eq this.type "untyped")}}Healing{{else}}{{capitalize this.type}}{{/if}}
+  - {{this.formula}} {{#if (eq this.type "untyped")}}Healing{{else}}{{md-titleCase this.type}}{{/if}}
   {{/each}}
-Target: {{capitalize system.target.value}}
-Range: {{capitalize system.range.value}}
+Target: {{md-titleCase system.target.value}}
+Range: {{md-titleCase system.range.value}}
 Area: {{system.area.value}} feet {{system.area.type}}
-Duration: {{capitalize system.duration.value}}
-Sustained: {{capitalize system.duration.sustained}}
-Defense: {{#if (md-contains system.traits.value "Attack")}}AC{{else}}{{#if system.defense.save.statistic}}{{capitalize system.defense.save.statistic}}{{/if}}{{/if}}
+Duration: {{md-titleCase system.duration.value}}
+Sustained: {{md-titleCase system.duration.sustained}}
+Defense: {{#if (md-contains system.traits.value "Attack")}}AC{{else}}{{#if system.defense.save.statistic}}{{md-titleCase system.defense.save.statistic}}{{/if}}{{/if}}
 Heightening: {{#if (eq system.heightening.type "interval")}}Interval +{{system.heightening.interval}}{{/if}}{{#if (eq system.heightening.type "fixed")}}Fixed Level{{/if}}
 Frequency: {{#if system.frequency.max}}{{system.frequency.max}} per {{md-map system.frequency.per 1 per round="Round" PT1M="Minute" PT10M="10 Minutes" PT1H="Hour" day="Day"}}{{/if}}
 ---

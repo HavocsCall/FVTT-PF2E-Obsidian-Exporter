@@ -4,14 +4,14 @@ aliases:
 tags:
 Source: {{md-yamlText system.publication.title}}
 Remaster: {{system.publication.remaster}}
-Level: {{system.level.value}}
-Rarity: {{capitalize system.traits.rarity}}
+Level: "{{system.level.value}}"
+Rarity: {{md-titleCase system.traits.rarity}}
 Traits:
   {{#each system.traits.value}}
   - "{{md-trait this}}"
   {{/each}}
-Category: {{capitalize system.category}}
-Group: {{capitalize system.group}}
+Category: {{md-titleCase system.category}}
+Group: {{md-titleCase system.group}}
 Price: {{md-coinLabel system.price.value}}
 Bulk: {{system.bulk.value}}
 ---

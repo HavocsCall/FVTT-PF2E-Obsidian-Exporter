@@ -4,34 +4,34 @@ aliases:
 tags:
 Source: {{md-yamlText system.publication.title}}
 Remaster: {{system.publication.remaster}}
-Rarity: {{capitalize system.traits.rarity}}
 Traits:
   {{#each system.traits.value}}
   - "{{md-trait this}}"
   {{/each}}
+Category: {{md-titleCase system.category}}
 Attribute:
   {{#each system.attribute}}
   - {{{md-ability this}}}
   {{/each}}
 Font:
   {{#each system.font}}
-  - {{capitalize this}}
+  - {{md-titleCase this}}
   {{/each}}
 Sanctification:
   {{#each system.sanctification.what}}
-  - {{capitalize this}}
+  - {{md-titleCase this}}
   {{/each}}
-Skill: "[[{{capitalize system.skill}}]]"
+Skill: "[[{{md-titleCase system.skill}}]]"
 Weapon:
   {{#each system.weapons}}
-  - "[[{{capitalize this}}]]"
+  - "[[{{md-titleCase this}}]]"
   {{/each}}
 Domains:
   {{#each system.domains.primary}}
-  - "[[{{capitalize this}}]]"
+  - "[[{{md-titleCase this}}]]"
   {{/each}}
   {{#each system.domains.alternate}}
-  - "[[{{capitalize this}}]]"
+  - "[[{{md-titleCase this}}]]"
   {{/each}}
 ---
 # {{name}}

@@ -1,11 +1,13 @@
 import TurndownService from "../vendor/turndown.browser.es.js";
+import { ABILITY_LABELS, ALL_ABILITY_KEYS, USAGE_LABELS } from "./Obsidian-Exporter.Constants.js";
 import {
-	ABILITY_LABELS,
-	ALL_ABILITY_KEYS,
-	PF2E_CONDITIONS,
-	PF2E_VALUED_CONDITIONS,
-	USAGE_LABELS,
-} from "./Obsidian-Exporter.Constants.js";
+	formatActionCode,
+	formatActionLabel,
+	formatTrait,
+	normalizeFoundryInlineRolls,
+	normalizeFoundryLinks,
+	removeStandalonePf2eUuidLinks,
+} from "./Obsidian-Exporter.PF2E-Text-Utils.js";
 
 // -------------------- Shared String Helpers -------------------- //
 /**
@@ -43,153 +45,37 @@ function toTitleCase(value) {
 }
 
 /**
+ * Normalizes slug separators into plain spaces.
+ * @param {string} value Input text.
+ * @returns {string} Space-normalized string.
+ */
+function normalizeSlugText(value) {
+	return String(value ?? "")
+		.trim()
+		.replace(/[_-]+/g, " ")
+		.replace(/\s+/g, " ");
+}
+
+/**
  * Capitalizes the first character of a value, returning an empty string for nullish input.
  * @param {string} value Input text.
  * @returns {string} Capitalized string or empty string when input is nullish/empty.
  */
 function safeCapitalize(value) {
-	const normalized = String(value ?? "").trim();
+	const normalized = normalizeSlugText(value);
 	if (!normalized) return "";
 	return normalized.charAt(0).toUpperCase() + normalized.slice(1);
 }
 
 /**
- * Normalizes a condition key for matching against PF2E condition sets.
- * @param {string} value Raw condition label or key.
- * @returns {string} Lowercased, whitespace-normalized condition key.
+ * Converts a value to title case after normalizing slug separators.
+ * @param {string} value Input text.
+ * @returns {string} Title-cased string or empty string when input is nullish/empty.
  */
-function normalizeConditionKey(value) {
-	return String(value ?? "")
-		.trim()
-		.toLowerCase()
-		.replace(/[\u2013\u2014]/g, "-")
-		.replace(/\s+/g, " ");
-}
-
-// -------------------- Foundry Link and Roll Normalization -------------------- //
-/**
- * Formats a Foundry link label into Obsidian wiki-link style.
- * @param {string} label Display label from a Foundry macro/link.
- * @returns {string} Obsidian-formatted link label, preserving valued condition suffixes.
- */
-function formatFoundryLinkLabel(label) {
-	const trimmedLabel = String(label ?? "").trim();
-	const valuedMatch = trimmedLabel.match(/^(.+?)\s+(\d+)$/);
-
-	if (valuedMatch) {
-		const conditionName = valuedMatch[1].trim();
-		const conditionValue = valuedMatch[2];
-		const conditionKey = normalizeConditionKey(conditionName);
-		if (PF2E_VALUED_CONDITIONS.has(conditionKey)) return `[[${conditionName}]] ${conditionValue}`;
-	}
-
-	return `[[${trimmedLabel}]]`;
-}
-
-/**
- * Formats a PF2E condition compendium label into Obsidian wiki-link style.
- * @param {string} label Display label from a condition compendium link.
- * @returns {string} Obsidian-formatted condition link.
- */
-function formatConditionCompendiumLabel(label) {
-	const trimmedLabel = String(label ?? "").trim();
-	const valuedMatch = trimmedLabel.match(/^(.+?)\s+(\d+)$/);
-
-	if (valuedMatch) {
-		const conditionName = valuedMatch[1].trim();
-		const conditionValue = valuedMatch[2];
-		const conditionKey = normalizeConditionKey(conditionName);
-		if (PF2E_VALUED_CONDITIONS.has(conditionKey)) return `[[${conditionName}]] ${conditionValue}`;
-	}
-
-	const conditionKey = normalizeConditionKey(trimmedLabel);
-	if (PF2E_CONDITIONS.has(conditionKey)) return `[[${trimmedLabel}]]`;
-	return `[[Persistent Damage|${trimmedLabel}]]`;
-}
-
-/**
- * Converts Foundry @UUID macro links into Obsidian-style links.
- * @param {string} value Markdown text that may contain @UUID links.
- * @returns {string} Text with UUID links normalized.
- */
-function normalizeFoundryUuidMacroLinks(value) {
-	return String(value ?? "").replace(
-		/@UUID\\?\[([^\]]+)\\?\]\{([^}]+)\}/g,
-		(_match, uuid, label) => {
-			const uuidText = String(uuid ?? "").toLowerCase();
-			if (uuidText.includes("compendium.pf2e.conditionitems.item.")) {
-				return formatConditionCompendiumLabel(label);
-			}
-			return formatFoundryLinkLabel(label);
-		},
-	);
-}
-
-/**
- * Converts Foundry bracket-link macros into Obsidian-style links.
- * @param {string} value Markdown text that may contain Foundry bracket links.
- * @returns {string} Text with bracket links normalized.
- */
-function normalizeFoundryBracketLinks(value) {
-	return String(value ?? "").replace(
-		/\\?\[\\?\[([^\]]+)\\?\]\\?\]\{([^}]+)\}/g,
-		(_match, target, label) => {
-			const targetText = String(target ?? "").toLowerCase();
-			if (targetText.includes("compendium.pf2e.conditionitems.item.")) {
-				return formatConditionCompendiumLabel(label);
-			}
-			return formatFoundryLinkLabel(label);
-		},
-	);
-}
-
-/**
- * Normalizes both UUID and bracket Foundry links into Obsidian-style links.
- * @param {string} value Markdown text that may contain Foundry links.
- * @returns {string} Text with supported Foundry links normalized.
- */
-function normalizeFoundryLinks(value) {
-	const uuidNormalized = normalizeFoundryUuidMacroLinks(value);
-	return normalizeFoundryBracketLinks(uuidNormalized);
-}
-
-/**
- * Removes standalone PF2E UUID utility lines from markdown text.
- * @param {string} value Markdown text to clean.
- * @returns {string} Markdown without standalone utility link lines.
- */
-function removeStandalonePf2eUuidLinks(value) {
-	return String(value ?? "")
-		.replace(
-			/^[ \t]*(?:[-*+]\s+|>\s*)?(?:[*_]{1,3}\s*)?@UUID\\?\[[^\]]*compendium\.pf2e\.pf2e-macros\.macro\.[^\]]+\\?\]\{[^}]+\}(?:\s*[*_]{1,3})?[ \t]*$/gim,
-			"",
-		)
-		.replace(
-			/^[ \t]*(?:[-*+]\s+|>\s*)?(?:[*_]{1,3}\s*)?@UUID\\?\[[^\]]*compendium\.pf2e\.other-effects\.item\.[^\]]+\\?\]\{[^}]+\}(?:\s*[*_]{1,3})?[ \t]*$/gim,
-			"",
-		)
-		.replace(
-			/^[ \t]*(?:[-*+]\s+|>\s*)?(?:[*_]{1,3}\s*)?@UUID\\?\[[^\]]*compendium\.pf2e\.journals\.[^\]]+\\?\]\{[^}]+\}(?:\s*[*_]{1,3})?[ \t]*$/gim,
-			"",
-		)
-		.replace(/\n{3,}/g, "\n\n")
-		.trim();
-}
-
-/**
- * Rewrites Foundry inline roll syntax to plain roll formulas.
- * @param {string} value Markdown text that may include inline rolls.
- * @returns {string} Text with inline rolls simplified.
- */
-function normalizeFoundryInlineRolls(value) {
-	return String(value ?? "").replace(
-		/\\?\[\\?\[\/r\s+([\s\S]*?)\\?\]\\?\]/g,
-		(_match, rollCommand) => {
-			const cleanedCommand = String(rollCommand).replace(/\\(\[|\])/g, "$1").trim();
-			const formulaToken = cleanedCommand.split(/\s+/)[0] ?? "";
-			return formulaToken.replace(/\[.*$/, "");
-		},
-	);
+function safeTitleCase(value) {
+	const normalized = normalizeSlugText(value);
+	if (!normalized) return "";
+	return toTitleCase(normalized);
 }
 
 // -------------------- PF2E Value Formatters -------------------- //
@@ -199,21 +85,46 @@ function normalizeFoundryInlineRolls(value) {
  * @returns {string} Display-friendly ability label.
  */
 function formatAbility(value) {
-	const raw = String(value ?? "").trim().toLowerCase();
-	if (!raw) return "";
+	const normalizePart = (part) => String(part ?? "").trim().toLowerCase();
+	const hasIterator = value != null && typeof value !== "string" && Symbol.iterator in Object(value);
+	const rawParts = Array.isArray(value)
+		? value
+		: hasIterator
+			? Array.from(value)
+			: value && typeof value === "object"
+				? Object.values(value)
+				: String(value ?? "").trim().toLowerCase().split(",");
+	const parts = [...new Set(rawParts.map((part) => normalizePart(part)).filter(Boolean))];
+	if (parts.length === 0) return "";
 
-	if (ABILITY_LABELS[raw]) return ABILITY_LABELS[raw];
-
-	const parts = raw
-		.split(",")
-		.map((part) => part.trim())
-		.filter(Boolean);
+	if (parts.length === 1 && ABILITY_LABELS[parts[0]]) return ABILITY_LABELS[parts[0]];
 
 	if (parts.length === ALL_ABILITY_KEYS.length && ALL_ABILITY_KEYS.every((key) => parts.includes(key))) {
 		return "Free";
 	}
 
-	return value ?? "";
+	const labels = parts.map((part) => ABILITY_LABELS[part] ?? part);
+	return labels.join(", ");
+}
+
+/**
+ * Removes duplicate values from an array while preserving order.
+ * @param {any} value Input collection.
+ * @returns {any[]} Deduplicated array.
+ */
+function uniqueList(value) {
+	if (value == null) return [];
+	const items = Array.isArray(value) ? value : [value];
+	return [...new Set(items.filter((item) => String(item ?? "").trim() !== ""))];
+}
+
+/**
+ * Collects helper arguments into an array, excluding the Handlebars options object.
+ * @param {...any} args Values to collect.
+ * @returns {any[]} Collected values.
+ */
+function collectList(...args) {
+	return args.slice(0, -1);
 }
 
 /**
@@ -254,29 +165,6 @@ function formatUsage(value) {
 }
 
 /**
- * Formats trait keys into Obsidian wiki-links, including valued trait variants.
- * @param {string} value Raw trait key.
- * @returns {string} Obsidian-formatted trait link.
- */
-function formatTrait(value) {
-	const raw = String(value ?? "").trim().toLowerCase();
-	if (!raw) return "";
-
-	const normalized = raw.replace(/_/g, "-");
-	const valuedMatch = normalized.match(/^(.+)-(\d+|d\d+|[a-z])$/i);
-
-	if (valuedMatch) {
-		const baseKey = valuedMatch[1];
-		const suffixRaw = valuedMatch[2];
-		const baseLabel = toTitleCase(baseKey.replace(/-/g, " "));
-		const suffixLabel = /^[a-z]$/i.test(suffixRaw) ? suffixRaw.toUpperCase() : suffixRaw.toLowerCase();
-		return `[[${baseLabel}|${baseLabel} ${suffixLabel}]]`;
-	}
-
-	return `[[${toTitleCase(normalized.replace(/-/g, " "))}]]`;
-}
-
-/**
  * Produces a YAML-safe quoted text value from rich/html content.
  * @param {string} value Source content that may contain HTML/entities.
  * @returns {string} Escaped, quoted YAML-safe text.
@@ -294,67 +182,6 @@ function formatYamlText(value) {
 	const normalized = withoutControlChars.replace(/\s+/g, " ").trim();
 	const escaped = normalized.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
 	return `"${escaped}"`;
-}
-
-// -------------------- Action Formatters -------------------- //
-/**
- * Formats action fields into display labels like "Reaction", "Free", or numeric ranges.
- * @param {string} actionTypeValue Action type source value.
- * @param {number} actionsValue Action count source value.
- * @returns {string} Display action label.
- */
-function formatActionLabel(actionTypeValue, actionsValue) {
-	const actionType = String(actionTypeValue ?? "").trim().toLowerCase();
-	const actionValue = String(actionsValue ?? "").trim().toLowerCase();
-
-	const normalizeRangeText = (value) =>
-		String(value ?? "")
-			.toLowerCase()
-			.replace(/\bactions?\b/g, "")
-			.trim();
-
-	const rangeValue = normalizeRangeText(actionType || actionValue);
-	const rangeMatch = rangeValue.match(/^(\d+)\s*(?:to|-)\s*(\d+)$/);
-	if (rangeMatch) return `${rangeMatch[1]} to ${rangeMatch[2]} Actions`;
-
-	if (actionType === "reaction") return "Reaction";
-	if (actionType === "free") return "Free";
-
-	const actionCount = Number(actionsValue);
-	if (Number.isInteger(actionCount) && actionCount >= 1 && actionCount <= 3) return String(actionCount);
-
-	const actionTypeCount = Number(actionTypeValue);
-	if (Number.isInteger(actionTypeCount) && actionTypeCount >= 1 && actionTypeCount <= 3) return String(actionTypeCount);
-
-	return "";
-}
-
-/**
- * Formats action fields into compact action code values used by templates.
- * @param {string} actionTypeValue Action type source value.
- * @param {number} actionsValue Action count source value.
- * @returns {string} Compact action code.
- */
-function formatActionCode(actionTypeValue, actionsValue) {
-	const actionType = String(actionTypeValue ?? "").trim().toLowerCase();
-	const actionValue = String(actionsValue ?? "").trim().toLowerCase();
-
-	const normalizeRangeText = (value) =>
-		String(value ?? "")
-			.toLowerCase()
-			.replace(/\bactions?\b/g, "")
-			.trim();
-
-	const rangeValue = normalizeRangeText(actionType || actionValue);
-	const rangeMatch = rangeValue.match(/^(\d+)\s*(?:to|-)\s*(\d+)$/);
-	if (rangeMatch) return rangeMatch[1];
-
-	if (actionType === "reaction") return "r";
-	if (actionType === "free") return "0";
-
-	const actionCount = Number(actionsValue);
-	if (Number.isInteger(actionCount) && actionCount >= 1 && actionCount <= 3) return String(actionCount);
-	return "";
 }
 
 /**
@@ -455,9 +282,15 @@ const turndown = new TurndownService({
  * Registers all custom Handlebars helpers used by exporter templates.
  */
 export function registerHandlebarsHelpers() {
-	Handlebars.registerHelper("capitalize", (value) => safeCapitalize(value));
+	Handlebars.registerHelper("md-capitalize", (value) => safeCapitalize(value));
+
+	Handlebars.registerHelper("md-titleCase", (value) => safeTitleCase(value));
 
 	Handlebars.registerHelper("md-ability", (value) => formatAbility(value));
+
+	Handlebars.registerHelper("md-list", (...args) => collectList(...args));
+	
+	Handlebars.registerHelper("md-unique", (value) => uniqueList(value));
 
 	Handlebars.registerHelper("md-coinLabel", (value) => formatCoinLabel(value));
 

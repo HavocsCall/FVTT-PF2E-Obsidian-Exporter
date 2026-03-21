@@ -1,0 +1,17 @@
+{{!--
+Trait template context is synthetic, not a full PF2E Item document.
+Available fields:
+- name
+- type
+- slug
+- system.description.value
+All shared Obsidian exporter Handlebars helpers are also available.
+--}}
+---
+NoteType: Trait
+aliases:
+tags:
+---
+# {{name}}
+***
+{{md-HTMLtoMarkdown system.description.value}}

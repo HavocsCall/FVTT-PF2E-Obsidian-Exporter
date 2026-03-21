@@ -4,12 +4,12 @@ aliases:
 tags:
 Source: {{md-yamlText system.publication.title}}
 Remaster: {{system.publication.remaster}}
-Rarity: {{capitalize system.traits.rarity}}
+Rarity: {{md-titleCase system.traits.rarity}}
 Traits:
   {{#each system.traits.value}}
   - "{{md-trait this}}"
   {{/each}}
-Group: {{capitalize system.group}}
+Group: {{md-titleCase system.group}}
 ---
 # {{name}}
 ***

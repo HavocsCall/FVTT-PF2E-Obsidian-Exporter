@@ -1,7 +1,7 @@
 {
 	"id": "FVTT-PF2E-Obsidian-Exporter",
 	"title": "PF2E Obsidian Exporter",
-	"description": "This FoundryVTT module",
+	"description": "Exports PF2E items, folders, compendiums, and trait descriptions from Foundry VTT to Obsidian-friendly Markdown files.",
 	"changelog": "CHANGELOG.md",
 	"download": "#{DOWNLOAD}#",
 	"license": "LICENSE",
