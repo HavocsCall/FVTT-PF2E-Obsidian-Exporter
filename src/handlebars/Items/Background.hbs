@@ -5,10 +5,6 @@ tags:
 Source: {{md-yamlText system.publication.title}}
 Remaster: {{system.publication.remaster}}
 Rarity: {{md-titleCase system.traits.rarity}}
-Traits:
-  {{#each system.traits.value}}
-  - "{{md-trait this}}"
-  {{/each}}
 Boosts:
   {{#each (md-unique (md-list
     (md-ability system.boosts.0.value)
@@ -19,7 +15,7 @@ Boosts:
   {{/each~}}
 Feat:
   {{#each system.items}}
-  - "[[{{this}}]]"
+  - "{{#if this.name}}[[{{md-yamlTextRaw this.name}}]]{{else}}[[{{md-yamlTextRaw this}}]]{{/if}}"
   {{/each}}
 Skill:
   {{#each system.trainedSkills.value}}
