@@ -1,4 +1,4 @@
-export const MODULE_ID = "FVTT-PF2E-Obsidian-Exporter";
+export const MODULE_ID = "FVTT_PF2EObsidianExporter";
 
 export const DEBUG = false;
 

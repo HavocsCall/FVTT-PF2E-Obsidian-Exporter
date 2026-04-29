@@ -1,12 +1,12 @@
-import { ITEM_TEMPLATE_SETTINGS, MODULE_ID } from "./Obsidian-Exporter.Constants.js";
-import { registerModuleSettings } from "./Obsidian-Exporter.Settings.js";
-import { registerHandlebarsHelpers } from "./Obsidian-Exporter.Handlebar-Helpers.js";
+import { ITEM_TEMPLATE_SETTINGS, MODULE_ID } from "./Constants.js";
+import { registerModuleSettings } from "./Settings.js";
+import { registerHandlebarsHelpers } from "./Handlebar-Helpers.js";
 import {
 	downloadMarkdown,
 	downloadZip,
 	getUniqueMarkdownBaseName,
 	sanitizeFileName,
-} from "./Obsidian-Exporter.Export-Utils.js";
+} from "./Export-Utils.js";
 import { strToU8, zipSync } from "../vendor/fflate.browser.js";
 
 // -------------------- Hooks -------------------- //
@@ -17,7 +17,7 @@ Hooks.once("init", () => {
 
 Hooks.on("getItemContextOptions", (_html, menuItems) => {
 	menuItems.push({
-		name: "FVTT-PF2E-OBSIDIAN-EXPORTER.CONTEXT.EXPORT-MARKDOWN",
+		name: "FVTT_PF2EOBSIDIANEXPORTER.CONTEXT.EXPORT-MARKDOWN",
 		icon: '<i class="fas fa-file-export"></i>',
 		condition: () => true,
 		callback: (header) => {
@@ -28,7 +28,7 @@ Hooks.on("getItemContextOptions", (_html, menuItems) => {
 
 Hooks.on("getFolderContextOptions", (_html, menuItems) => {
 	menuItems.push({
-		name: "FVTT-PF2E-OBSIDIAN-EXPORTER.CONTEXT.EXPORT-MARKDOWN",
+		name: "FVTT_PF2EOBSIDIANEXPORTER.CONTEXT.EXPORT-MARKDOWN",
 		icon: '<i class="fas fa-file-export"></i>',
 		condition: (header) => {
 			const folder = getFolderFromContextHeader(header);
@@ -42,7 +42,7 @@ Hooks.on("getFolderContextOptions", (_html, menuItems) => {
 
 Hooks.on("getCompendiumContextOptions", (_html, menuItems) => {
 	menuItems.push({
-		name: "FVTT-PF2E-OBSIDIAN-EXPORTER.CONTEXT.EXPORT-MARKDOWN",
+		name: "FVTT_PF2EOBSIDIANEXPORTER.CONTEXT.EXPORT-MARKDOWN",
 		icon: '<i class="fas fa-file-export"></i>',
 		condition: (header) => {
 			const pack = getCompendiumPackFromContextHeader(header);
@@ -55,15 +55,15 @@ Hooks.on("getCompendiumContextOptions", (_html, menuItems) => {
 });
 
 Hooks.once("ready", () => {
-	console.log(MODULE_ID, game.i18n.localize("FVTT-PF2E-OBSIDIAN-EXPORTER.NOTIFICATIONS.READY"));
+	console.log(MODULE_ID, game.i18n.localize("FVTT_PF2EOBSIDIANEXPORTER.NOTIFICATIONS.READY"));
 });
 
 function localizeExporter(key) {
-	return game.i18n.localize(`FVTT-PF2E-OBSIDIAN-EXPORTER.${key}`);
+	return game.i18n.localize(`FVTT_PF2EOBSIDIANEXPORTER.${key}`);
 }
 
 function formatExporter(key, data) {
-	return game.i18n.format(`FVTT-PF2E-OBSIDIAN-EXPORTER.${key}`, data);
+	return game.i18n.format(`FVTT_PF2EOBSIDIANEXPORTER.${key}`, data);
 }
 
 function notifyExportFailure(key, data, error) {

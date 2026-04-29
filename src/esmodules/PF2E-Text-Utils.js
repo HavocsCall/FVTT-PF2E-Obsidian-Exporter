@@ -1,4 +1,4 @@
-import { CONDITIONS, REMASTER_CHANGES, TRAIT_FAMILY_NORMALIZERS, VALUED_CONDITIONS } from "./Obsidian-Exporter.Constants.js";
+import { CONDITIONS, REMASTER_CHANGES, TRAIT_FAMILY_NORMALIZERS, VALUED_CONDITIONS } from "./Constants.js";
 
 function toTitleCase(value) {
 	return String(value ?? "")

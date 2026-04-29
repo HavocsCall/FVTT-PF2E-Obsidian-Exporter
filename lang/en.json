@@ -1,5 +1,5 @@
 {
-	"FVTT-PF2E-OBSIDIAN-EXPORTER": {
+	"FVTT_PF2EOBSIDIANEXPORTER": {
 		"NAME": "PF2E Obsidian Exporter",
 		"CONTEXT": {
 			"EXPORT-MARKDOWN": "Export as Markdown"

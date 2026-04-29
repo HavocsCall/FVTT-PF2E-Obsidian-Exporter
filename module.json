@@ -1,5 +1,5 @@
 {
-	"id": "FVTT-PF2E-Obsidian-Exporter",
+	"id": "FVTT_Pf2eObsidianExporter",
 	"title": "PF2E Obsidian Exporter",
 	"description": "Exports PF2E items, folders, compendiums, and trait descriptions from Foundry VTT to Obsidian-friendly Markdown files.",
 	"changelog": "CHANGELOG.md",
@@ -38,5 +38,5 @@
 			}
 		]
 	},
-	"esmodules": ["src/esmodules/Obsidian-Exporter.Main.js"]
+	"esmodules": ["src/esmodules/Main.js"]
 }

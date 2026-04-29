@@ -44,7 +44,7 @@ Install like any other Foundry module:
 
 1. Open Foundry VTT.
 2. Go to `Add-on Modules`.
-3. Install using this Manifest URL `https://github.com/HavocsCall/FVTT-PF2E-Obsidian-Exporter/releases/latest/download/module.json`.
+3. Install using this Manifest URL `https://github.com/HavocsCall/FVTT_Pf2eObsidianExporter/releases/latest/download/module.json`.
 4. Enable **PF2E Obsidian Exporter** in your world.
 
 ## Usage
@@ -82,11 +82,11 @@ Go to `Game Settings -> Configure Settings -> Module Settings -> PF2E Obsidian E
 
 Each supported item type has a template path setting. By default, item templates point to:
 
-`modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Items/*.hbs`
+`modules/FVTT_Pf2eObsidianExporter/src/handlebars/Items/*.hbs`
 
 Trait exports use:
 
-`modules/FVTT-PF2E-Obsidian-Exporter/src/handlebars/Trait.hbs`
+`modules/FVTT_Pf2eObsidianExporter/src/handlebars/Trait.hbs`
 
 You can replace these with your own Handlebars templates to match your Obsidian vault conventions.
 

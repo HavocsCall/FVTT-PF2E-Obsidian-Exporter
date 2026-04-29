@@ -2,17 +2,17 @@ import {
 	EXCLUDED_TRAITS,
 	MODULE_ID,
 	SETTINGS,
-} from "./Obsidian-Exporter.Constants.js";
-import { downloadZip, getUniqueMarkdownBaseName } from "./Obsidian-Exporter.Export-Utils.js";
-import { applyRemasterChange, getBaseTraitKey } from "./Obsidian-Exporter.PF2E-Text-Utils.js";
+} from "./Constants.js";
+import { downloadZip, getUniqueMarkdownBaseName } from "./Export-Utils.js";
+import { applyRemasterChange, getBaseTraitKey } from "./PF2E-Text-Utils.js";
 import { strToU8, zipSync } from "../vendor/fflate.browser.js";
 
 function localizeExporter(key) {
-	return game.i18n.localize(`FVTT-PF2E-OBSIDIAN-EXPORTER.${key}`);
+	return game.i18n.localize(`FVTT_PF2EOBSIDIANEXPORTER.${key}`);
 }
 
 function formatExporter(key, data) {
-	return game.i18n.format(`FVTT-PF2E-OBSIDIAN-EXPORTER.${key}`, data);
+	return game.i18n.format(`FVTT_PF2EOBSIDIANEXPORTER.${key}`, data);
 }
 
 function notifyExportFailure(key, data, error) {
@@ -219,7 +219,7 @@ export class TraitExportMenu extends foundry.applications.api.HandlebarsApplicat
 		},
 		window: {
 			icon: "fas fa-file-export",
-			title: "FVTT-PF2E-OBSIDIAN-EXPORTER.SETTINGS.EXPORT-TRAITS.TITLE",
+			title: "FVTT_PF2EOBSIDIANEXPORTER.SETTINGS.EXPORT-TRAITS.TITLE",
 			contentClasses: ["standard-form"],
 		},
 		actions: {
@@ -238,7 +238,7 @@ export class TraitExportMenu extends foundry.applications.api.HandlebarsApplicat
 	};
 
 	get title() {
-		return game.i18n.localize("FVTT-PF2E-OBSIDIAN-EXPORTER.SETTINGS.EXPORT-TRAITS.TITLE");
+		return game.i18n.localize("FVTT_PF2EOBSIDIANEXPORTER.SETTINGS.EXPORT-TRAITS.TITLE");
 	}
 
 	/**

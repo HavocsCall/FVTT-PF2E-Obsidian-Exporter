@@ -1,5 +1,5 @@
 import TurndownService from "../vendor/turndown.browser.es.js";
-import { ABILITY_LABELS, ALL_ABILITY_KEYS, USAGE_LABELS } from "./Obsidian-Exporter.Constants.js";
+import { ABILITY_LABELS, ALL_ABILITY_KEYS, USAGE_LABELS } from "./Constants.js";
 import {
 	formatActionCode,
 	formatActionLabel,
@@ -7,7 +7,7 @@ import {
 	normalizeFoundryInlineRolls,
 	normalizeFoundryLinks,
 	removeStandalonePf2eUuidLinks,
-} from "./Obsidian-Exporter.PF2E-Text-Utils.js";
+} from "./PF2E-Text-Utils.js";
 
 // -------------------- Shared String Helpers -------------------- //
 /**
@@ -280,3 +280,4 @@ export function registerHandlebarsHelpers() {
 		return new Handlebars.SafeString(normalized);
 	});
 }
+

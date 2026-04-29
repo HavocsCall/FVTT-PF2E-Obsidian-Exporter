@@ -1,5 +1,5 @@
 {
-  "name": "fvtt-pf2e-obsidian-exporter",
+  "name": "fvtt_pf2eobsidianexporter",
   "version": "0.0.0",
   "private": true,
   "type": "module",
